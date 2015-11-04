@@ -448,6 +448,8 @@ public class StdErrLog extends AbstractLogger
             buffer.append(_abbrevname);
         }
         buffer.append(':');
+        buffer.append(Thread.currentThread().getName());
+        buffer.append(':');
         if (_source)
         {
             Throwable source = new Throwable();

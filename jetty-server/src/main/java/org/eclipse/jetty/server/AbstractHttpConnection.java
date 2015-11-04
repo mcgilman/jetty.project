@@ -549,7 +549,7 @@ public abstract class AbstractHttpConnection  extends AbstractConnection
                 catch (Throwable e)
                 {
                     async_exception=e;
-                    LOG.warn(String.valueOf(_uri),e);
+                    LOG.warn(_uri.toSafeString(),e);
                     error=true;
                     _request.setHandled(true);
                     _generator.sendError(info==null?400:500, null, null, true);
@@ -774,6 +774,11 @@ public abstract class AbstractHttpConnection  extends AbstractConnection
     protected void startRequest(Buffer method, Buffer uri, Buffer version) throws IOException
     {
         uri=uri.asImmutableBuffer();
+        
+        if (LOG.isDebugEnabled())
+        {
+            LOG.debug("Start Request: URI [{}]",new String(uri.array(),uri.getIndex(),uri.length(),StringUtil.__UTF8_CHARSET));
+        }
 
         _host = false;
         _expect = false;

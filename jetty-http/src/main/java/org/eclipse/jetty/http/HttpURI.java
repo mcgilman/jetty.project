@@ -755,6 +755,11 @@ public class HttpURI
         _encoded=false;
     }
 
+    public String toSafeString()
+    {
+        return new String(_raw,_scheme,_end-_scheme,StringUtil.__UTF8_CHARSET);
+    }
+
     @Override
     public String toString()
     {
