@@ -2032,7 +2032,7 @@ public class Request implements HttpServletRequest
     @Override
     public String toString()
     {
-        return (_handled?"[":"(") + getMethod() + " " + _uri + (_handled?"]@":")@") + hashCode() + " " + super.toString();
+        return (_handled?"[":"(") + getMethod() + " " + _uri.toSafeString() + (_handled?"]@":")@") + hashCode() + " " + super.toString();
     }
 
     /* ------------------------------------------------------------ */

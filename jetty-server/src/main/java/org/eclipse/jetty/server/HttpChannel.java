@@ -314,7 +314,7 @@ public class HttpChannel<T> implements HttpParser.RequestHandler<T>, Runnable
                 if (e instanceof EofException)
                     LOG.debug(e);
                 else
-                    LOG.warn(String.valueOf(_uri), e);
+                    LOG.warn(_uri.toSafeString(), e);
                 _state.error(e);
                 _request.setHandled(true);
                 handleException(e);
@@ -442,6 +442,12 @@ public class HttpChannel<T> implements HttpParser.RequestHandler<T>, Runnable
         else
             _uri.parse(uri.array(),uri.arrayOffset()+uri.position(),uri.remaining());
         _request.setUri(_uri);
+        
+        if (LOG.isDebugEnabled())
+        {
+            LOG.debug("Start Request: URI [{}]",_uri.toSafeString());
+            Thread.currentThread().setName(Thread.currentThread().getName() + " - " + _uri.toSafeString());
+        }
 
         String path;
         try
