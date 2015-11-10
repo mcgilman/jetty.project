@@ -243,11 +243,8 @@ public class HttpChannel<T> implements HttpParser.RequestHandler<T>, Runnable
         setCurrentHttpChannel(this);
 
         String threadName = null;
-        if (LOG.isDebugEnabled())
-        {
-            threadName = Thread.currentThread().getName();
-            Thread.currentThread().setName(threadName + " - " + _uri);
-        }
+        threadName = Thread.currentThread().getName();
+        Thread.currentThread().setName(threadName + " - " + _uri.toSafeString());
 
         // Loop here to handle async request redispatches.
         // The loop is controlled by the call to async.unhandle in the
@@ -325,8 +322,9 @@ public class HttpChannel<T> implements HttpParser.RequestHandler<T>, Runnable
             }
         }
 
-        if (threadName != null && LOG.isDebugEnabled())
+        if (threadName != null)
             Thread.currentThread().setName(threadName);
+        
         setCurrentHttpChannel(null);
 
         if (next==Next.COMPLETE)

@@ -358,13 +358,13 @@ public class UrlEncoded extends MultiMap<String> implements Cloneable
                 }
                 catch(NotUtf8Exception e)
                 {
-                    LOG.warn(e.toString());
+                    LOG.warn("[{}] {}", new String(raw,offset,length,StandardCharsets.UTF_8), e.toString());
                     LOG.debug(e);
                 }
                 catch(NumberFormatException e)
                 {
                     buffer.append(Utf8Appendable.REPLACEMENT_UTF8,0,3);
-                    LOG.warn(e.toString());
+                    LOG.warn("[{}] {}", new String(raw,offset,length,StandardCharsets.UTF_8), e.toString());
                     LOG.debug(e);
                 }
             }
@@ -566,13 +566,13 @@ public class UrlEncoded extends MultiMap<String> implements Cloneable
                 }
                 catch(NotUtf8Exception e)
                 {
-                    LOG.warn(e.toString());
+                    LOG.warn("(Streamed) {}", e.toString());
                     LOG.debug(e);
                 }
                 catch(NumberFormatException e)
                 {
                     buffer.append(Utf8Appendable.REPLACEMENT_UTF8,0,3);
-                    LOG.warn(e.toString());
+                    LOG.warn("(Streamed) {}", e.toString());
                     LOG.debug(e);
                 }
                 if (maxLength>=0 && (++totalLength > maxLength))
@@ -752,7 +752,7 @@ public class UrlEncoded extends MultiMap<String> implements Cloneable
      * This method makes the assumption that the majority of calls
      * will need no decoding.
      */
-    public static String decodeString(String encoded,int offset,int length,Charset charset)
+    public static String decodeString(String encoded,final int offset,final int length,Charset charset)
     {
         if (charset==null || StandardCharsets.UTF_8.equals(charset))
         {
@@ -818,12 +818,12 @@ public class UrlEncoded extends MultiMap<String> implements Cloneable
                         }
                         catch(NotUtf8Exception e)
                         {
-                            LOG.warn(e.toString());
+                            LOG.warn("[{}] {}", encoded.subSequence(offset,offset+length), e.toString());
                             LOG.debug(e);
                         }
                         catch(NumberFormatException e)
                         {
-                            LOG.warn(e.toString());
+                            LOG.warn("[{}] {}", encoded.subSequence(offset,offset+length), e.toString());
                             LOG.debug(e);
                             buffer.getStringBuffer().append(Utf8Appendable.REPLACEMENT);  
                         }
@@ -919,7 +919,7 @@ public class UrlEncoded extends MultiMap<String> implements Cloneable
                                 }
                                 catch(Exception e)
                                 {   
-                                    LOG.warn(e.toString());
+                                    LOG.warn("[{}] {}", encoded.subSequence(offset,offset+length), e.toString());
                                     LOG.debug(e);
                                     ba[n++] = (byte)'?';
                                 }
