@@ -91,29 +91,44 @@ public class PathMappingsTest
     {
         PathMappings<String> p = new PathMappings<>();
 
-        p.put(new ServletPathSpec("/abs/path"),"path");
-        p.put(new ServletPathSpec("/abs/path/longer"),"longpath");
-        p.put(new ServletPathSpec("/animal/bird/*"),"birds");
-        p.put(new ServletPathSpec("/animal/fish/*"),"fishes");
-        p.put(new ServletPathSpec("/animal/*"),"animals");
-        p.put(new ServletPathSpec("*.tar.gz"),"tarball");
-        p.put(new ServletPathSpec("*.gz"),"gzipped");
-        p.put(new ServletPathSpec("/"),"default");
+        p.put(new ServletPathSpec("/abs/path"),"abspath"); // 1
+        p.put(new ServletPathSpec("/abs/path/longer"),"longpath"); // 2 
+        p.put(new ServletPathSpec("/animal/bird/*"),"birds"); // 3
+        p.put(new ServletPathSpec("/animal/fish/*"),"fishes"); // 4
+        p.put(new ServletPathSpec("/animal/*"),"animals"); // 5
+        p.put(new ServletPathSpec("*.tar.gz"),"tarball"); // 6
+        p.put(new ServletPathSpec("*.gz"),"gzipped"); // 7
+        p.put(new ServletPathSpec("/"),"default"); // 8
+        p.put(new ServletPathSpec(""),"root"); // 10
+        p.put(new ServletPathSpec("/\u20ACuro/*"),"money"); // 11
 
         // dumpMappings(p);
 
-        assertMatch(p,"/abs/path","path");
+        // From old PathMapTest
+        assertMatch(p,"/abs/path","abspath");
+        assertMatch(p,"/abs/path/xxx","default");
+        assertMatch(p,"/abs/pith","default");
         assertMatch(p,"/abs/path/longer","longpath");
+        assertMatch(p,"/abs/path/","default");
         assertMatch(p,"/abs/path/foo","default");
-        assertMatch(p,"/main.css","default");
-        assertMatch(p,"/downloads/script.gz","gzipped");
-        assertMatch(p,"/downloads/distribution.tar.gz","tarball");
-        assertMatch(p,"/downloads/readme.txt","default");
-        assertMatch(p,"/downloads/logs.tgz","default");
-        assertMatch(p,"/animal/horse/mustang","animals");
         assertMatch(p,"/animal/bird/eagle/bald","birds");
         assertMatch(p,"/animal/fish/shark/hammerhead","fishes");
         assertMatch(p,"/animal/insect/ladybug","animals");
+        assertMatch(p,"/animal","animals");
+        assertMatch(p,"/animal/","animals");
+        assertMatch(p,"/animal/other","animals");
+        assertMatch(p,"/animal/*","animals");
+        assertMatch(p,"/downloads/distribution.tar.gz","tarball");
+        assertMatch(p,"/downloads/script.gz","gzipped");
+        assertMatch(p,"/animal/arhive.gz","animals");
+        assertMatch(p,"/Other/path","default");
+        assertMatch(p,"/\u20ACuro/path","money");
+        assertMatch(p,"/","root");
+        
+        // Extra tests
+        assertMatch(p,"/downloads/readme.txt","default");
+        assertMatch(p,"/downloads/logs.tgz","default");
+        assertMatch(p,"/main.css","default");
     }
     
     /**

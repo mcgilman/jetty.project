@@ -42,7 +42,7 @@ public class PathMappingsSpecTest
         p.put(new ServletPathSpec("*.tar.gz"), "6");
         p.put(new ServletPathSpec("*.gz"), "7");
         p.put(new ServletPathSpec("/"), "8");
-        // p.put(new ServletPathSpec("/XXX:/YYY"), "9"); // Special Servlet 12.2 case
+        // p.put(new ServletPathSpec("/XXX:/YYY"), "9"); // special syntax from Jetty 3.1.x
         p.put(new ServletPathSpec(""), "10");
         p.put(new ServletPathSpec("/\u20ACuro/*"), "11");
 
@@ -96,8 +96,9 @@ public class PathMappingsSpecTest
         assertEquals("pathInfo prefix", null, new ServletPathSpec("/Foo/*").getPathInfo("/Foo"));
         assertEquals("pathInfo suffix", null, new ServletPathSpec("*.ext").getPathInfo("/Foo/bar.ext"));
         assertEquals("pathInfo default", null, new ServletPathSpec("/").getPathInfo("/Foo/bar.ext"));
-        assertEquals("multi paths", "9", p.getMatch("/XXX").getResource());
-        assertEquals("multi paths", "9", p.getMatch("/YYY").getResource());
+        
+        // assertEquals("multi paths", "9", p.getMatch("/XXX").getResource());
+        // assertEquals("multi paths", "9", p.getMatch("/YYY").getResource());
 
         p.put(new ServletPathSpec("/*"), "0");
 

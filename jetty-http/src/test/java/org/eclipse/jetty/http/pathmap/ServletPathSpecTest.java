@@ -92,14 +92,6 @@ public class ServletPathSpecTest
     }
 
     @Test
-    public void testEmptyPathSpec()
-    {
-        ServletPathSpec spec = new ServletPathSpec("");
-        assertEquals("Spec.pathSpec","/",spec.getPathSpec());
-        assertEquals("Spec.pathDepth",-1,spec.getPathDepth());
-    }
-
-    @Test
     public void testExactPathSpec()
     {
         ServletPathSpec spec = new ServletPathSpec("/abs/path");
@@ -107,8 +99,8 @@ public class ServletPathSpecTest
         assertEquals("Spec.pathDepth",2,spec.getPathDepth());
 
         assertMatches(spec,"/abs/path");
-        assertMatches(spec,"/abs/path/");
-
+        
+        assertNotMatches(spec,"/abs/path/");
         assertNotMatches(spec,"/abs/path/more");
         assertNotMatches(spec,"/foo");
         assertNotMatches(spec,"/foo/abs/path");
@@ -133,7 +125,15 @@ public class ServletPathSpecTest
     public void testNullPathSpec()
     {
         ServletPathSpec spec = new ServletPathSpec(null);
-        assertEquals("Spec.pathSpec","/",spec.getPathSpec());
+        assertEquals("Spec.pathSpec","",spec.getPathSpec());
+        assertEquals("Spec.pathDepth",-1,spec.getPathDepth());
+    }
+    
+    @Test
+    public void testRootPathSpec()
+    {
+        ServletPathSpec spec = new ServletPathSpec("");
+        assertEquals("Spec.pathSpec","",spec.getPathSpec());
         assertEquals("Spec.pathDepth",-1,spec.getPathDepth());
     }
 
