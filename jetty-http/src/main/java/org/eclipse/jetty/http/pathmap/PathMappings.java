@@ -68,19 +68,38 @@ public class PathMappings<E> implements Iterable<MappedResource<E>>, Dumpable
         mappings.clear();
     }
     
+    /**
+     * Return a list of MappedResource matches for the specified path.
+     * 
+     * @param path the path to return matches on
+     * @return the list of mapped resource the path matches on
+     */
     public List<MappedResource<E>> getMatches(String path)
     {
+        boolean matchRoot = "/".equals(path);
+        
         List<MappedResource<E>> ret = new ArrayList<>();
         int len = mappings.size();
         for (int i = 0; i < len; i++)
         {
             MappedResource<E> mr = mappings.get(i);
-            if (mr.getPathSpec().matches(path))
+
+            switch (mr.getPathSpec().group)
             {
-                ret.add(mr);
+                case ROOT:
+                    if (matchRoot)
+                        ret.add(mr);
+                    break;
+                case DEFAULT:
+                    if (matchRoot || mr.getPathSpec().matches(path))
+                        ret.add(mr);
+                    break;
+                default:
+                    if (mr.getPathSpec().matches(path))
+                        ret.add(mr);
+                    break;
             }
         }
-        ret.add(defaultResource);
         return ret;
     }
 

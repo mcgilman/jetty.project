@@ -99,6 +99,7 @@ public class PathMappingsTest
         p.put(new ServletPathSpec("*.tar.gz"),"tarball"); // 6
         p.put(new ServletPathSpec("*.gz"),"gzipped"); // 7
         p.put(new ServletPathSpec("/"),"default"); // 8
+        // 9 was the old Jetty ":" spec delimited case (no longer valid)
         p.put(new ServletPathSpec(""),"root"); // 10
         p.put(new ServletPathSpec("/\u20ACuro/*"),"money"); // 11
 

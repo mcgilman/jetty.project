@@ -18,9 +18,13 @@
 
 package org.eclipse.jetty.http.pathmap;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Test;
 
@@ -46,42 +50,6 @@ public class PathMappingsSpecTest
         p.put(new ServletPathSpec(""), "10");
         p.put(new ServletPathSpec("/\u20ACuro/*"), "11");
 
-        String[][] tests = {
-                { "/abs/path", "1"},
-                { "/abs/path/xxx", "8"},
-                { "/abs/pith", "8"},
-                { "/abs/path/longer", "2"},
-                { "/abs/path/", "8"},
-                { "/abs/path/xxx", "8"},
-                { "/animal/bird/eagle/bald", "3"},
-                { "/animal/fish/shark/grey", "4"},
-                { "/animal/insect/bug", "5"},
-                { "/animal", "5"},
-                { "/animal/", "5"},
-                { "/animal/x", "5"},
-                { "/animal/*", "5"},
-                { "/suffix/path.tar.gz", "6"},
-                { "/suffix/path.gz", "7"},
-                { "/animal/path.gz", "5"},
-                { "/Other/path", "8"},
-                { "/\u20ACuro/path", "11"},
-                { "/", "10"},
-                };
-
-        for (String[] test : tests)
-        {
-            assertEquals(test[0], test[1], p.getMatch(test[0]).getResource());
-        }
-
-        // assertEquals("Get absolute path", "1", p.get("/abs/path"));
-        assertEquals("Match absolute path", "/abs/path", p.getMatch("/abs/path").getPathSpec().pathSpec);
-        assertEquals("all matches", "[/animal/bird/*=3, /animal/*=5, *.tar.gz=6, *.gz=7, /=8]",
-                p.getMatches("/animal/bird/path.tar.gz").toString());
-        assertEquals("Dir matches", "[/animal/fish/*=4, /animal/*=5, /=8]", p.getMatches("/animal/fish/").toString());
-        assertEquals("Dir matches", "[/animal/fish/*=4, /animal/*=5, /=8]", p.getMatches("/animal/fish").toString());
-        assertEquals("Root matches", "[=10, /=8]",p.getMatches("/").toString());
-        assertEquals("Dir matches", "[/=8]", p.getMatches("").toString());
-
         assertEquals("pathMatch exact", "/Foo/bar", new ServletPathSpec("/Foo/bar").getPathMatch("/Foo/bar"));
         assertEquals("pathMatch prefix", "/Foo", new ServletPathSpec("/Foo/*").getPathMatch("/Foo/bar"));
         assertEquals("pathMatch prefix", "/Foo", new ServletPathSpec("/Foo/*").getPathMatch("/Foo/"));
@@ -97,9 +65,6 @@ public class PathMappingsSpecTest
         assertEquals("pathInfo suffix", null, new ServletPathSpec("*.ext").getPathInfo("/Foo/bar.ext"));
         assertEquals("pathInfo default", null, new ServletPathSpec("/").getPathInfo("/Foo/bar.ext"));
         
-        // assertEquals("multi paths", "9", p.getMatch("/XXX").getResource());
-        // assertEquals("multi paths", "9", p.getMatch("/YYY").getResource());
-
         p.put(new ServletPathSpec("/*"), "0");
 
         // assertEquals("Get absolute path", "1", p.get("/abs/path"));
@@ -194,12 +159,12 @@ public class PathMappingsSpecTest
     private void assertMatch(String spec, String path)
     {
         boolean match = new ServletPathSpec(spec).matches(path);
-        assertTrue("PathSpec '" + spec + "' should match path '" + path + "'", match);
+        assertThat("PathSpec '" + spec + "' should match path '" + path + "'", match, is(true));
     }
 
     private void assertNotMatch(String spec, String path)
     {
         boolean match = new ServletPathSpec(spec).matches(path);
-        assertFalse("PathSpec '" + spec + "' should not match path '" + path + "'", match);
+        assertThat("PathSpec '" + spec + "' should not match path '" + path + "'", match, is(false));
     }
 }

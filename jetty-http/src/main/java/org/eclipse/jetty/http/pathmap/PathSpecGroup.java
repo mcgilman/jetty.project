@@ -75,6 +75,17 @@ public enum PathSpecGroup
      */
     SUFFIX_GLOB,
     /**
+     * The root spec for accessing the Root behavior.
+     * 
+     * <pre>
+     *   ""           - servlet spec       (Root Servlet)
+     *   null         - servlet spec       (Root Servlet)
+     * </pre>
+     * 
+     * Note: there is no known uri-template spec variant of this kind of path spec
+     */
+    ROOT,
+    /**
      * The default spec for accessing the Default path behavior.
      * 
      * <pre>
@@ -87,15 +98,4 @@ public enum PathSpecGroup
      * If nothing above matches, then default will match.
      */
     DEFAULT,
-    /**
-     * The root spec for accessing the Root behavior.
-     * 
-     * <pre>
-     *   ""           - servlet spec       (Root Servlet)
-     *   null         - servlet spec       (Root Servlet)
-     * </pre>
-     * 
-     * Note: there is no known uri-template spec variant of this kind of path spec
-     */
-    ROOT,
 }
