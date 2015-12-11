@@ -598,8 +598,6 @@ public class ServletHolder extends Holder<Servlet> implements UserIdentity.Scope
             if (_config==null)
                 _config=new Config();
 
-
-
             // Handle run as
             if (_identityService!=null)
             {
@@ -612,13 +610,10 @@ public class ServletHolder extends Holder<Servlet> implements UserIdentity.Scope
                 initJspServlet();
                 detectJspContainer();
             }
+            else if (_forcedPath != null)
+                detectJspContainer();
 
             initMultiPart();
-
-            if (_forcedPath != null && _jspContainer == null)
-            {
-                detectJspContainer();
-            }
 
             if (LOG.isDebugEnabled())
                 LOG.debug("Servlet.init {} for {}",_servlet,getName());
